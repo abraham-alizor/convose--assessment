@@ -1,16 +1,11 @@
 import type {FC} from 'react';
 import React, {memo, useMemo} from 'react';
 import type {ViewProps} from 'react-native';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  useColorScheme,
-} from 'react-native';
-import diacriticless from './diacriticless';
+import {StyleSheet, TouchableOpacity, View, useColorScheme} from 'react-native';
+
 import {theme} from './theme';
 import {Image} from '../Image';
+import BracketText from '@/helpers/BracketText';
 
 interface ScrollViewListItemProps {
   highlight: string;
@@ -24,75 +19,16 @@ interface ScrollViewListItemProps {
 }
 
 export const ScrollViewListItem: FC<ScrollViewListItemProps> = memo(
-  ({
-    highlight,
-    title,
-    image,
-    style,
-    onPress,
-    ignoreAccents,
-    numberOfLines = 2,
-    loading,
-  }) => {
+  ({title, image, onPress}) => {
     const themeName = useColorScheme();
     const styles = useMemo(() => getStyles(themeName || 'light'), [themeName]);
-
-    const titleParts = useMemo(() => {
-      let titleHighlighted = '';
-      let titleStart = title;
-      let titleEnd = '';
-
-      if (
-        typeof title === 'string' &&
-        title?.length > 0 &&
-        highlight?.length > 0
-      ) {
-        const highlightIn = ignoreAccents
-          ? diacriticless(title?.toLowerCase())
-          : title?.toLowerCase();
-        const highlightWhat = ignoreAccents
-          ? diacriticless(highlight?.toLowerCase())
-          : highlight?.toLowerCase();
-
-        const substrIndex = highlightIn?.indexOf(highlightWhat);
-        if (substrIndex !== -1) {
-          titleStart = title?.slice(0, substrIndex);
-          titleHighlighted = title?.slice(
-            substrIndex,
-            substrIndex + highlight?.length,
-          );
-          titleEnd = title?.slice(substrIndex + highlight?.length);
-        }
-      }
-
-      return {titleHighlighted, titleStart, titleEnd};
-    }, [highlight, ignoreAccents, title]);
 
     return (
       <TouchableOpacity onPress={onPress}>
         <View style={styles.container}>
           <Image source={{uri: image}} style={{width: 20, height: 20}} />
-          <Text numberOfLines={numberOfLines}>
-            <Text
-              numberOfLines={1}
-              style={{...styles.text, ...(style as object)}}>
-              {titleParts.titleStart}
-            </Text>
-            <Text
-              numberOfLines={1}
-              style={{
-                ...styles.text,
-                ...(style as object),
-                ...styles.textBold,
-              }}>
-              {titleParts.titleHighlighted}
-            </Text>
-            <Text
-              numberOfLines={1}
-              style={{...styles.text, ...(style as object)}}>
-              {titleParts.titleEnd}
-            </Text>
-          </Text>
+
+          <BracketText text={title} />
         </View>
       </TouchableOpacity>
     );

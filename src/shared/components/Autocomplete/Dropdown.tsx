@@ -70,7 +70,7 @@ export const Dropdown = memo((props: DropdownProps) => {
         )}
       </Box>
 
-      {loading ? (
+      {/* {loading ? (
         <Box paddingHorizontal={'lg'}>
           <Skeleton
             duration={2000}
@@ -85,22 +85,20 @@ export const Dropdown = memo((props: DropdownProps) => {
             isLoading={loading}
           />
         </Box>
-      ) : (
-        <FlatList
-          keyboardDismissMode="on-drag"
-          keyboardShouldPersistTaps="handled"
-          nestedScrollEnabled={true}
-          data={dataSet}
-          style={{maxHeight: suggestionsListMaxHeight}}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-          ListEmptyComponent={ListEmptyComponent}
-          ItemSeparatorComponent={
-            ItemSeparatorComponent ?? defaultItemSeparator
-          }
-          {...rest.flatListProps}
-        />
-      )}
+      ) : ( */}
+      <FlatList
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="handled"
+        nestedScrollEnabled={true}
+        data={dataSet}
+        style={{maxHeight: suggestionsListMaxHeight}}
+        renderItem={renderItem}
+        keyExtractor={item => item.id}
+        ListEmptyComponent={ListEmptyComponent}
+        ItemSeparatorComponent={ItemSeparatorComponent ?? defaultItemSeparator}
+        {...rest.flatListProps}
+      />
+      {/* )} */}
 
       <Box justifyContent={'center'} alignItems={'center'}>
         <TouchableHighlight

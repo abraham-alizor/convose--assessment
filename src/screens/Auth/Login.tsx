@@ -1,12 +1,5 @@
 import React, {FC, useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  TouchableHighlight,
-} from 'react-native';
+import {KeyboardAvoidingView, Platform, ScrollView} from 'react-native';
 import {landingpagebackground} from '@/assets/pngImagePack';
 import StatusbarImageContainer from '@/shared/layout/StatusbarImageContainer';
 import {Box} from '@/shared/components/Box';
@@ -14,28 +7,26 @@ import {Box} from '@/shared/components/Box';
 import {RootNavigationProps} from '@/navigations/types';
 import {AutocompleteDropdown} from '@/shared/components/Autocomplete';
 import {MockData} from '../../mock/index';
-import {Image} from '@/shared/components/Image';
 
-interface LoginFormData {
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
+import {useInterests} from '../../hooks/index';
+import {Text} from '@/shared/components/Typography';
 
 const Signup: FC<RootNavigationProps<'LoginScreen'>> = ({navigation}) => {
-  const {t} = useTranslation();
   const [selectedItem, setSelectedItem] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = (data: LoginFormData) => {
-    Keyboard.dismiss();
-    setIsLoading(true);
+  const {data, isLoading, isError, error} = useInterests({
+    limit: 12,
+    from: 0,
+  });
 
-    setTimeout(() => {
-      setIsLoading(false);
-      navigation.replace('Kyc');
-    }, 2000);
-  };
+  if (isError) {
+    return (
+      <Box>
+        <Text>Error: {(error as Error).message}</Text>
+      </Box>
+    );
+  }
+  console.log(data);
 
   return (
     <StatusbarImageContainer
